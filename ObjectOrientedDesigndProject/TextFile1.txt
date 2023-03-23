@@ -1,0 +1,6 @@
+﻿Movie - "<title> - Tytanic;<genre> - Drama(<releaseYear> - 1997/<duration> - 195)@(<author id> - 1)"
+Series - "<title> - Breaking Bad;<genre> - drama@(<showrunner id> - 1)-(<episode id>)1 2 3"
+Episode - "<title> - Fly/<duration> - 45(<releaseYear> - 2010);(<author id> - 1)"
+Episode - "<title> - Fly2/<duration> - 45(<releaseYear> - 2010);(<author id> - 1)"
+Episode - "<title> - Fly3/<duration> - 45(<releaseYear> - 2010);(<author id> - 1)"
+Author - "<name> - Francis+<surname> - Coppola+<birthYear> - 1939^<awards>^32"

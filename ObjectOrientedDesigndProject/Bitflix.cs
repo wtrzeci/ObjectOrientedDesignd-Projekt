@@ -1,0 +1,282 @@
+﻿using ObjectOrientedDesigndProject.classes;
+using ObjectOrientedDesigndProject.classes_txt;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace ObjectOrientedDesigndProject
+{
+    public class Bitflix
+    {
+        public data_from_txt data_From_Txt;
+        public data data_main;
+        private Dictionary<int,Author_txt>authorDict = new Dictionary<int,Author_txt>();
+        private Dictionary<int,Episode_txt>episodeDict = new Dictionary<int,Episode_txt>();
+        private Dictionary<int, Author> _mainAuthorDict = new Dictionary<int, Author>();
+        private Dictionary<int, Episode>_mainEpisodeDict = new Dictionary<int, Episode>();
+        public Bitflix() 
+        {
+            data_From_Txt = new data_from_txt();
+            data_main = new data();
+        }
+        public void LoadDataFromFile(string _path)
+        {
+            StreamReader sr = new StreamReader(_path);
+            string? line;
+            line = sr.ReadLine();
+            int numOfAuthors = 1;
+            int numOfSeries = 1;
+            int numOfEpisode = 1;
+            while (line != null) 
+            {
+                if (line.Contains("Movie"))
+                {
+                    data_From_Txt.movies.Add(Readmovie_txt(line));
+                }
+                else if (line.Contains("Series"))
+                {
+                    Series_txt series = ReadSeries_txt(line);
+                    series.SeriesId = numOfSeries;
+                    numOfSeries++;
+                    data_From_Txt.series.Add(series);
+                }
+                else if (line.Contains("Episode"))
+                {
+                    Episode_txt episode = ReadEpisodes_txt(line);
+                    episode.episodeId = numOfEpisode;//we count the number of episodes :)
+                    numOfEpisode++;
+                    data_From_Txt.episodes.Add(episode);
+                }
+                else if (line.Contains("Author"))
+                {
+                    Author_txt author = ReadAuthor_txt(line);
+                    author.authorIndex = numOfAuthors;
+                    authorDict.Add(numOfAuthors, author);
+                    numOfAuthors++;
+                    data_From_Txt.authors.Add(author);
+                }
+                line = sr.ReadLine();
+            }
+            
+            
+        }
+        public void LoadDataToProgramFormat()
+        {
+            foreach(var author in data_From_Txt.authors)
+            {
+                Author temp = ReadAuthorFromTxtClass(author);
+                _mainAuthorDict.Add(author.authorIndex, temp);
+                data_main.authors.Add(temp);
+            }
+            foreach (var episode in data_From_Txt.episodes)
+            {
+                Episode temp = ReadEpisodeFormTxtClass(episode);
+                _mainEpisodeDict.Add(episode.episodeId, temp);
+                data_main.episodes.Add(temp);
+            }
+
+            foreach (var series in data_From_Txt.series)
+            {
+                Series _series = ReadSeriesFromTxtClass(series);
+                foreach(var v in  series.episodesId) 
+                {
+                    _series.episodes.Add(_mainEpisodeDict[v]);
+                }
+                data_main.series.Add(_series);
+            }
+            foreach (var movie in data_From_Txt.movies)
+            {
+                Movie temp = ReadMovieFromTxtClass(movie);
+                data_main.movies.Add(temp);
+            }
+
+        }
+        #region TranslateFromTxt
+        private Author ReadAuthorFromTxtClass (Author_txt author)
+        {
+            Author temp = new Author();
+            temp.Name = author.Name;
+            temp.Surname = author.Surname;
+            temp.birthYear = author.birthYear;
+            temp.awards = author.awards;
+            return temp;
+        }
+        private Series ReadSeriesFromTxtClass (Series_txt series)
+        {
+            Series temp = new Series();
+            temp.title=series.title;
+            temp.genere =series.genere;
+            temp.showrunner = _mainAuthorDict[series.showrunnerId];
+            temp.episodes = new List<Episode>();
+            return temp;
+        }
+        private Episode ReadEpisodeFormTxtClass (Episode_txt episode)
+        {
+            Episode temp = new Episode();
+            temp.title = episode.title;
+            temp.duration = episode.duration;
+            temp.releaseYear = episode.releaseYear;
+            temp.author = _mainAuthorDict[episode.authorId];
+            return temp;
+        }
+        private Movie ReadMovieFromTxtClass (Movie_txt movie)
+        {
+            Movie temp = new Movie();
+            temp.genere=movie.genere;
+            temp.releaseYear=movie.releaseYear;
+            temp.director = _mainAuthorDict[movie.directorId];
+            temp.name = movie.title;
+            temp.duration = movie.duration;
+            return temp;
+        }
+        #endregion
+        //parse lines from txt functions
+        #region ClasesFromLine
+        private Movie_txt Readmovie_txt(string line)
+        {
+            string movieString = line.Substring(9,line.Length-10);
+
+            // Regular expression pattern to extract the fields
+            string pattern = @"^<title> - (.+);<genre> - (.+?)\(<releaseYear> - (.+)\/<duration> - (.*?)\)@\(<author id> - (.*)\)";
+
+            // Create a Regex object and match the pattern against the string
+            Regex regex = new Regex(pattern);
+            Match match = regex.Match(movieString);
+
+            // Extract the fields from the Match object
+            string title = match.Groups[1].Value;
+            string genre = match.Groups[2].Value;
+            int releaseYear = int.Parse(match.Groups[3].Value);
+            int duration = int.Parse(match.Groups[4].Value);
+            int authorId = int.Parse(match.Groups[5].Value);
+
+            // Print the extracted fields
+            Movie_txt temp = new Movie_txt();
+            temp.title = title;
+            temp.genere = genre;
+            temp.releaseYear = releaseYear;
+            temp.duration = duration;
+            temp.directorId = authorId;
+            return temp;
+        }
+
+        private Series_txt ReadSeries_txt(string line)
+        {
+            string movieString = line.Substring(10, line.Length - 11);
+
+            // Regular expression pattern to extract the fields
+            string pattern = @"^<title> - (.+);<genre> - (.+?)\@\(<showrunner id> - (.*?)\)\-\((.+)\)(.+)";
+
+            // Create a Regex object and match the pattern against the string
+            Regex regex = new Regex(pattern);
+            Match match = regex.Match(movieString);
+
+            // Extract the fields from the Match object
+            string title = match.Groups[1].Value;
+            string genre = match.Groups[2].Value;
+            int show_runner = int.Parse(match.Groups[3].Value);
+            string episodes = match.Groups[5].Value;
+            // Print the extracted fields
+            Series_txt temp = new Series_txt();
+            temp.title = title;
+            temp.genere = genre;
+            temp.showrunnerId = show_runner;
+            foreach(var num in episodes.Split(' ')) 
+            { 
+                if (num!=null)
+                {
+                    int numer = int.Parse(num);
+                    temp.episodesId.Add(numer);
+                }
+            }
+
+            return temp;
+        }
+        private Episode_txt ReadEpisodes_txt(string line)
+        {
+            string movieString = line.Substring(11, line.Length - 12);
+
+            // Regular expression pattern to extract the fields
+            string pattern = @"^<title> - (.+)\/<duration> - (.+?)\(<releaseYear> - (.+?)\);\(<author id> - (.+?)\)";
+
+            // Create a Regex object and match the pattern against the string
+            Regex regex = new Regex(pattern);
+            Match match = regex.Match(movieString);
+
+            // Extract the fields from the Match object
+            string title = match.Groups[1].Value;
+            int duration = int.Parse(match.Groups[2].Value); ;
+            int release_year = int.Parse(match.Groups[3].Value);
+            int author_id = int.Parse(match.Groups[4].Value);
+            // Print the extracted fields
+            Episode_txt temp = new Episode_txt();
+            temp.title = title;
+            temp.authorId = author_id;
+            temp.duration = duration;
+            temp.releaseYear = release_year;
+            return temp;
+        }
+        private Author_txt ReadAuthor_txt(string line)
+        {
+            string movieString = line.Substring(10, line.Length - 11);
+
+            // Regular expression pattern to extract the fields
+            string pattern = @"^<name> - (.+?)\+<surname> - (.+?)\+<birthYear> - (.+?)\^<awards>\^(.+)";
+
+            // Create a Regex object and match the pattern against the string
+            Regex regex = new Regex(pattern);
+            Match match = regex.Match(movieString);
+
+            // Extract the fields from the Match object
+            string name = match.Groups[1].Value;
+            string surname = match.Groups[2].Value;
+            int year = int.Parse(match.Groups[3].Value);
+            int awards = int.Parse(match.Groups[4].Value);
+            // Print the extracted fields
+            Author_txt temp = new Author_txt();
+            temp.Name = name;
+            temp.Surname = surname;
+            temp.birthYear = year;
+            temp.awards = awards;
+            return temp;
+        }
+
+
+        #endregion
+    }
+
+    //structs declaration
+    #region structs
+    public struct data_from_txt
+    {
+        internal List<Author_txt>? authors { get; set; }
+        internal List<Series_txt>? series { get; set; }
+        internal List<Movie_txt>? movies { get; set; }
+        internal List<Episode_txt>? episodes { get; set; }
+        public data_from_txt()
+        {
+            authors = new List<Author_txt>();
+            series = new List<Series_txt>();
+            movies = new List<Movie_txt>();
+            episodes = new List<Episode_txt>();
+        }
+    }
+    public struct data
+    {
+        internal List<Author>? authors { get; set; }
+        internal List<Series>? series { get; set; }
+        internal List<Movie>? movies { get; set; }
+        internal List<Episode>? episodes { get; set; }
+        public data()
+        {
+            authors = new List<Author>();
+            series = new List<Series>();
+            movies = new List<Movie>();
+            episodes = new List<Episode>();
+        }
+    }
+    #endregion
+}
