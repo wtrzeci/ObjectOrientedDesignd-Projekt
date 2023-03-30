@@ -1,4 +1,5 @@
 ﻿using ObjectOrientedDesigndProject.classes;
+using ObjectOrientedDesigndProject.classes__map;
 using ObjectOrientedDesigndProject.classes_txt;
 using System;
 using System.Collections.Generic;
@@ -63,7 +64,7 @@ namespace ObjectOrientedDesigndProject
             
             
         }
-        public void LoadDataToProgramFormat()
+        public void LoadDataToProgramFormatFromTxt()
         {
             foreach(var author in data_From_Txt.authors)
             {
@@ -92,6 +93,42 @@ namespace ObjectOrientedDesigndProject
                 Movie temp = ReadMovieFromTxtClass(movie);
                 data_main.movies.Add(temp);
             }
+
+        }
+        internal void LoadDataToTxtFormatFromMap(List<Author_map> authors, List<Episode_map> episodes, List<Movie_map> movies, List<Series_map> series)
+        {
+            int numOfAuthors = 1;
+            int numOfSeries = 1;
+            int numOfEpisode = 1;
+            foreach (var author in authors)
+            {
+                Author_txt temp = ReadAuthor_txtFromMapClass(author);
+                temp.authorIndex = numOfAuthors;
+                authorDict.Add(numOfAuthors, temp);
+                numOfAuthors++;
+                data_From_Txt.authors.Add(temp);
+            }
+            foreach ( var episode in episodes)
+            {
+                Episode_txt temp = ReadEpisode_txtFromMapClass(episode);
+                temp.episodeId = numOfEpisode;//we count the number of episodes :)
+                episodeDict.Add(numOfEpisode, temp);
+                numOfEpisode++;
+                data_From_Txt.episodes.Add(temp);
+            }
+            foreach ( var movie in movies)
+            {
+                Movie_txt temp = ReadMovie_txtFromMapClass(movie);
+                data_From_Txt.movies.Add(temp);
+            }
+            foreach (var ser in series)
+            {
+                Series_txt temp = ReadSeries_txtFromMapClass(ser);
+                temp.SeriesId = numOfSeries;
+                numOfSeries++;
+                data_From_Txt.series.Add(temp);
+            }
+            return;
 
         }
         #region TranslateFromTxt
@@ -130,6 +167,60 @@ namespace ObjectOrientedDesigndProject
             temp.director = _mainAuthorDict[movie.directorId];
             temp.name = movie.title;
             temp.duration = movie.duration;
+            return temp;
+        }
+
+        private Author_txt ReadAuthor_txtFromMapClass(Author_map author )
+        {
+            Author_txt temp = new Author_txt();
+            temp.Name = author.data["name"];
+            string surname;
+            author.data.TryGetValue("surname", out surname);
+            temp.Surname = surname;
+            temp.authorIndex = author.index;
+            string awards;
+            author.data.TryGetValue("awards", out awards);
+            temp.awards = int.Parse(awards);
+            temp.birthYear = int.Parse(author.data["birthYear"]);
+            return temp;
+
+        }
+        private Episode_txt ReadEpisode_txtFromMapClass (Episode_map episode)
+        {
+            Episode_txt temp = new Episode_txt();
+            temp.title = episode.data["title"];
+            temp.authorId = int.Parse(episode.data["authorId"]);
+            temp.duration = int.Parse(episode.data["duration"]);
+            temp.episodeId = episode.index;
+            temp.releaseYear = int.Parse(episode.data["releaseYear"]);
+            return temp;
+
+        }
+        private Movie_txt ReadMovie_txtFromMapClass (Movie_map movie)
+        {
+            Movie_txt temp = new Movie_txt();
+            temp.title = movie.map["title"];
+            temp.genere = movie.map["genere"];
+            temp.duration = int.Parse( movie.map["duration"]);
+            temp.releaseYear = int.Parse(movie.map["releaseYear"]);
+            temp.directorId = int.Parse(movie.map["directorId"]);
+            return temp;
+        }
+
+        private Series_txt ReadSeries_txtFromMapClass (Series_map series)
+        {
+            Series_txt temp = new Series_txt();
+            temp.title = series.map["title"];
+            temp.genere = series.map["genere"];
+            temp.SeriesId = series.index;
+            temp.showrunnerId = int.Parse(series.map["showrunnerId"]);
+            foreach(var num in series.map.Where(i=>i.Key == "episode"))
+            {
+                foreach (var item in num.Value.Split(" "))
+                {
+                    temp.episodesId.Add(int.Parse(item));
+                }
+            }
             return temp;
         }
         #endregion

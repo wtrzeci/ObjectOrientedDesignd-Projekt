@@ -16,7 +16,7 @@ namespace ObjectOrientedDesigndProject.classes
         public override string ToString()
         {
             string final;
-            final = "Series " + title + " of genere " + genere + "run by: " + showrunner + " with episodes:";
+            final = "Series " + title + " of genere " + genere + " run by: " + showrunner + " with episodes:";
             foreach (var episode in episodes)
             {
                 final += episode.ToString();
