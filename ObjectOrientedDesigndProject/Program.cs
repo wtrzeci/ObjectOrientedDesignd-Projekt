@@ -64,7 +64,7 @@ namespace ObjectOrientedDesigndProject
             Author_map a6 = new Author_map("Greg", "Daniels", "1963", "5");
             Author_map a7 = new Author_map("Victor", "Nelli Jr", "1960", "0");
             Author_map a8 = new Author_map("Charles", "McDougall", "1960", "0");
-            Author_map a9 = new Author_map("9", "9", "1960", "0");
+            Author_map a9 = new Author_map("Winston", "Churchil", "1960", "0");
             List<Author_map> authors = new List<Author_map> { a1, a2, a3, a4, a5, a6, a7, a8, a9 };
             List<Series_map> series = new List<Series_map> { s1, s2 };
             List<Episode_map> episodes = new List<Episode_map> { e1, e2, e3, e4, e5, e6 };
@@ -85,6 +85,42 @@ namespace ObjectOrientedDesigndProject
                     Console.WriteLine(ser);
                 }
             }
+            SortedList<Author> authorslist = new SortedList<Author>((a1, a2) => a1.awards > a2.awards, null);
+            foreach (var author in bitflix.data_main.authors)
+                authorslist.Add(author);
+            authorslist.Delete(bitflix.data_main.authors[0]);
+            int indexxx =authorslist.Find(bitflix.data_main.authors[5]);
+            Console.WriteLine(bitflix.data_main.authors[5]);
+            Console.WriteLine(authorslist[indexxx]);
+            //Enumerators
+            Console.WriteLine("________________Enumerator_______________");
+            foreach (var author in authorslist.GetReverseEnumerator())
+            {
+                Console.WriteLine(author);
+            }
+            Console.WriteLine("________________ReverseEnumerator_______________");
+            foreach (var author in authorslist.GetEnumerator())
+            {
+                Console.WriteLine(author);
+            }
+            Console.WriteLine("________________________ForEach_____________________");
+            Console.WriteLine("lambda:(x) => x.awards += 1");
+            //For each
+            Algosy<Author>.ForEach(authorslist.GetEnumerator(), (x) => x.awards += 1);
+            //
+            foreach (var author in authorslist.GetEnumerator())
+            {
+                Console.WriteLine(author);
+            }
+            Console.WriteLine("________________________CountIf_____________________");
+            Console.WriteLine("lambda: (x) => x.awards == 1");
+            int number = Algosy<Author>.CountIf(authorslist.GetEnumerator(), (x) => x.awards == 1);
+            Console.WriteLine(number);
+            Console.WriteLine("_______________________FIND_________________________");
+            Author a =Algosy<Author>.Find(authorslist.GetEnumerator(), (x) => x.birthYear == 1963) ;
+            Console.WriteLine(a);
+
+
             //this is the first part finished :) 
         }
     }

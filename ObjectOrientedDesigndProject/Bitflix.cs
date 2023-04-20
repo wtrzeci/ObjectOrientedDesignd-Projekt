@@ -132,7 +132,7 @@ namespace ObjectOrientedDesigndProject
 
         }
         #region TranslateFromTxt
-        private Author ReadAuthorFromTxtClass (Author_txt author)
+        public static Author ReadAuthorFromTxtClass (Author_txt author)
         {
             Author temp = new Author();
             temp.Name = author.Name;
@@ -170,7 +170,7 @@ namespace ObjectOrientedDesigndProject
             return temp;
         }
 
-        private Author_txt ReadAuthor_txtFromMapClass(Author_map author )
+        public static Author_txt ReadAuthor_txtFromMapClass(Author_map author )
         {
             Author_txt temp = new Author_txt();
             temp.Name = author.data["name"];
@@ -207,7 +207,7 @@ namespace ObjectOrientedDesigndProject
             return temp;
         }
 
-        private Series_txt ReadSeries_txtFromMapClass (Series_map series)
+        public static Series_txt ReadSeries_txtFromMapClass (Series_map series)
         {
             Series_txt temp = new Series_txt();
             temp.title = series.map["title"];
@@ -223,6 +223,10 @@ namespace ObjectOrientedDesigndProject
             }
             return temp;
         }
+        #endregion
+        #region TranslateFromBaseToMap
+
+
         #endregion
         //parse lines from txt functions
         #region ClasesFromLine

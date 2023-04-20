@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ObjectOrientedDesigndProject.classes__map
 {
-    internal class Series_map
+    public class Series_map
     {
         public int index;
         public Dictionary<string, string> map;

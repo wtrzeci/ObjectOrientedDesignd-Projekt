@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ObjectOrientedDesigndProject.classes
 {
-    internal class Author
+    public class Author
     {
         public string Name { get; set; }
         public string Surname { get; set; }

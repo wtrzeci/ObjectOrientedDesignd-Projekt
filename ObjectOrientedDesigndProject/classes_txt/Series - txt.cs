@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ObjectOrientedDesigndProject.classes_txt
 {
-    internal class Series_txt
+    public class Series_txt
     {
         public string title {  get; set; }
         public string genere { get; set; }
