@@ -89,6 +89,7 @@ namespace ObjectOrientedDesigndProject
             foreach (var author in bitflix.data_main.authors)
                 authorslist.Add(author);
             authorslist.Delete(bitflix.data_main.authors[0]);
+            Console.WriteLine("_____FINDLISTFUNC______");
             int indexxx =authorslist.Find(bitflix.data_main.authors[5]);
             Console.WriteLine(bitflix.data_main.authors[5]);
             Console.WriteLine(authorslist[indexxx]);
