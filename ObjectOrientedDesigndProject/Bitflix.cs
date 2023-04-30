@@ -2,6 +2,7 @@
 using ObjectOrientedDesigndProject.classes__map;
 using ObjectOrientedDesigndProject.classes_txt;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,15 @@ namespace ObjectOrientedDesigndProject
         private Dictionary<int,Episode_txt>episodeDict = new Dictionary<int,Episode_txt>();
         private Dictionary<int, Author> _mainAuthorDict = new Dictionary<int, Author>();
         private Dictionary<int, Episode>_mainEpisodeDict = new Dictionary<int, Episode>();
+        Dictionary<string, Func<object, object, bool>> comparisonOperators = new Dictionary<string, Func<object, object, bool>>()
+{
+    { "=", (x, y) => x.Equals(y) },
+    { "<", (x, y) => Comparer.Default.Compare(x, y) < 0 },
+    { ">", (x, y) => Comparer.Default.Compare(x, y) > 0 },
+    { "<=", (x, y) => Comparer.Default.Compare(x, y) <= 0 },
+    { ">=", (x, y) => Comparer.Default.Compare(x, y) >= 0 },
+};
+
         public Bitflix() 
         {
             data_From_Txt = new data_from_txt();
@@ -341,6 +351,25 @@ namespace ObjectOrientedDesigndProject
 
 
         #endregion
+
+        #region Bitfilix commands
+
+        public object GetTableOfName(string name)
+        {
+            return data_main.CommandArrayDict[name];
+        }
+        public object GetTableSecondaryOfName(string name)
+        {
+            return data_From_Txt.CommandArrayDict[name];
+        }
+
+        public Func<object, object, bool> GetFuncOfName(string name)
+        {
+            return comparisonOperators[name];
+        }
+
+
+        #endregion
     }
 
     //structs declaration
@@ -351,12 +380,20 @@ namespace ObjectOrientedDesigndProject
         internal List<Series_txt>? series { get; set; }
         internal List<Movie_txt>? movies { get; set; }
         internal List<Episode_txt>? episodes { get; set; }
+        public Dictionary<string, object> CommandArrayDict;
         public data_from_txt()
         {
             authors = new List<Author_txt>();
             series = new List<Series_txt>();
             movies = new List<Movie_txt>();
             episodes = new List<Episode_txt>();
+            CommandArrayDict = new Dictionary<string, object>
+            {
+                {"authors",authors },
+                {"series",series },
+                {"movies",movies },
+                {"episodes",episodes }
+            };
         }
     }
     public struct data
@@ -365,12 +402,22 @@ namespace ObjectOrientedDesigndProject
         internal List<Series>? series { get; set; }
         internal List<Movie>? movies { get; set; }
         internal List<Episode>? episodes { get; set; }
+
+        public Dictionary<string, object> CommandArrayDict;
         public data()
         {
             authors = new List<Author>();
             series = new List<Series>();
             movies = new List<Movie>();
             episodes = new List<Episode>();
+            CommandArrayDict = new Dictionary<string, object>
+            {
+                {"authors",authors },
+                {"series",series },
+                {"movies",movies },
+                {"episodes",episodes }
+            };
+
         }
     }
     #endregion

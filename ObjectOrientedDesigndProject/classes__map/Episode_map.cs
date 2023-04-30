@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ObjectOrientedDesigndProject.classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,18 @@ namespace ObjectOrientedDesigndProject.classes__map
             data["releaseYear"] = releaseYear;
             data["authorId"] = authorId;
             data["episodeId"] = episodeId;
+        }
+        public Dictionary<string, object> Properties()
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>
+            {
+                {"title", data["title"]},
+               {"duration",data["duration"]},
+               {"releaseYear ",data["releaseYear"] },
+               {"episodeId",data["episodeId"]},
+                { "authorId",data["authorId"]}
+            };
+            return properties;
         }
     }
 }

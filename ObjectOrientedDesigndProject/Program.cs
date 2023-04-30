@@ -123,6 +123,7 @@ namespace ObjectOrientedDesigndProject
 
 
             //this is the first part finished :) 
+            CommandLineUtility.GetCommands(bitflix);
         }
     }
 }
