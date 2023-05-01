@@ -90,19 +90,36 @@ namespace ObjectOrientedDesigndProject
             dynamic temp = obj[0];
             List<string> values = new List<string>();
             Type type = temp.GetType();
-            foreach (string temp2 in temp.Properties().Keys)
+            int i = 0;
+            for (;;)
             {
-                Console.Write(temp2 + ": ");
-                string value = Console.ReadLine();
-                if (value != null)
-                {
-                    values.Add(value);
-                }
-                else if ( value == "EXIT" )
-                {
-                    return;
+                foreach (string temp2 in temp.Properties().Keys)
+                { 
+                    Console.Write(temp2 + ": ");
+                    string value = Console.ReadLine();
+                    
+                     if (value == "EXIT")
+                    {
+                        return;
+                    }
+                    else if (value == "DONE")
+                    {
+                        goto EXIT;
+                    }
+                    else if (value != null)
+                    {
+                        if (i < temp.Properties().Keys.Count)
+                            values.Add(value);
+                        else
+                        {
+                            Console.WriteLine(i % temp.Properties().Keys.Count );
+                            values[i % temp.Properties().Keys.Count ] = value;
+                        }
+                    }
+                    i++;
                 }
             }
+            EXIT:
             dynamic instance = Activator.CreateInstance(type);
             instance.SetValuesWithList(values);
             obj.Add(instance);
