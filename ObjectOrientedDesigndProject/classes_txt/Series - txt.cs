@@ -1,4 +1,5 @@
-﻿using ObjectOrientedDesigndProject.classes_Base;
+﻿using ObjectOrientedDesigndProject.classes;
+using ObjectOrientedDesigndProject.classes_Base;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,6 +43,10 @@ namespace ObjectOrientedDesigndProject.classes_txt
             {
                 episodesId.Add(int.Parse(s));
             }
+        }
+        public Series ChangeToBase (Series_txt series)
+        {
+            return Bitflix.instance.ReadSeriesFromTxtClass(series);
         }
     }
 }

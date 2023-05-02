@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace ObjectOrientedDesigndProject.classes_txt
 {
-    internal class Episode_txt : InterfaceBasse, ListInnitializable
+    public class Episode_txt : InterfaceBasse, ListInnitializable
     {
 
         public string title { get; set; }
@@ -48,6 +48,10 @@ namespace ObjectOrientedDesigndProject.classes_txt
             releaseYear = int.Parse(values[2]);
             authorId = int.Parse(values[3]);
             episodeId= int.Parse(values[4]);
+        }
+        public Episode ChangeToBase(Episode_txt episode)
+        {
+           return Bitflix.instance.ReadEpisodeFormTxtClass(episode);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace ObjectOrientedDesigndProject
                         if ((args.Length-1) %3 != 0) { throw new Exception("List of Args has to be divisible by 3"); }
                         PrintListWithRequaierments(args, bitflix);
                         break;
-                    case "exit":
+                    case "EXIT":
                         return;
                         break;
                     case "add":
@@ -81,12 +81,23 @@ namespace ObjectOrientedDesigndProject
         }
         private static void AddObjectToList(string[] args, Bitflix bitflix)
         {
-            string _tableName = args[0] + "s";
-            dynamic obj;
-            if (args[0] == "base")
-                obj =bitflix.GetTableSecondaryOfName(_tableName);
+            string _tableName = args[0];
+            if (args[0]!= "series")
+            {
+                _tableName += "s";
+            }
+            
+            dynamic obj,second;
+            if (args[1] == "secondary")
+            {
+                second = bitflix.GetTableOfName(_tableName);
+                obj = bitflix.GetTableSecondaryOfName(_tableName);
+            }
             else
+            {
+                second = bitflix.GetTableSecondaryOfName(_tableName);
                 obj = bitflix.GetTableOfName(_tableName);
+            }
             dynamic temp = obj[0];
             List<string> values = new List<string>();
             Type type = temp.GetType();
@@ -104,7 +115,7 @@ namespace ObjectOrientedDesigndProject
                     }
                     else if (value == "DONE")
                     {
-                        goto EXIT;
+                        goto Done;
                     }
                     else if (value != null)
                     {
@@ -119,9 +130,18 @@ namespace ObjectOrientedDesigndProject
                     i++;
                 }
             }
-            EXIT:
+            Done:
+            while (values.Count <= temp.Properties().Keys.Count)
+            {
+                values.Add("-1");
+            }
             dynamic instance = Activator.CreateInstance(type);
-            instance.SetValuesWithList(values);
+            instance.SetValuesWithList(values,bitflix);
+            if (args[1] == "secondary")
+            {
+                dynamic baseRep = instance.ChangeToBase(instance);
+                second.Add(baseRep);
+            }
             obj.Add(instance);
         }
     }

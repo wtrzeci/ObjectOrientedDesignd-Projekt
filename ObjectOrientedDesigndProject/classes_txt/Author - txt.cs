@@ -3,6 +3,7 @@ using ObjectOrientedDesigndProject.classes_Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,7 +48,7 @@ namespace ObjectOrientedDesigndProject.classes_txt
             authorIndex = int.Parse(values[4]);
         }
 
-        public static implicit operator Author (Author_txt authorTxt)
+        public Author ChangeToBase(Author_txt authorTxt)
         {
             return Bitflix.ReadAuthorFromTxtClass(authorTxt);
         }

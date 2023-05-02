@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ObjectOrientedDesigndProject.classes_txt
 {
-    internal class Movie_txt : InterfaceBasse, ListInnitializable
+    public class Movie_txt : InterfaceBasse, ListInnitializable
     {
         public string title { get; set; }
         public string genere { get; set; }
@@ -38,6 +38,10 @@ namespace ObjectOrientedDesigndProject.classes_txt
             releaseYear = int.Parse(values[2]);
             duration = int.Parse(values[3]);
             directorId = int.Parse(values[4]);
+        }
+        public Movie ChangeToBase(Movie_txt movie)
+        {
+            return Bitflix.instance.ReadMovieFromTxtClass(movie);
         }
     }
 }

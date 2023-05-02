@@ -19,6 +19,7 @@ namespace ObjectOrientedDesigndProject
         private Dictionary<int,Episode_txt>episodeDict = new Dictionary<int,Episode_txt>();
         private Dictionary<int, Author> _mainAuthorDict = new Dictionary<int, Author>();
         private Dictionary<int, Episode>_mainEpisodeDict = new Dictionary<int, Episode>();
+        public static Bitflix instance { get; private set; }
         Dictionary<string, Func<object, object, bool>> comparisonOperators = new Dictionary<string, Func<object, object, bool>>()
 {
     { "=", (x, y) => x.Equals(y) },
@@ -32,6 +33,7 @@ namespace ObjectOrientedDesigndProject
         {
             data_From_Txt = new data_from_txt();
             data_main = new data();
+            instance = this;
         }
         public void LoadDataFromFile(string _path)
         {
@@ -151,7 +153,7 @@ namespace ObjectOrientedDesigndProject
             temp.awards = author.awards;
             return temp;
         }
-        private Series ReadSeriesFromTxtClass (Series_txt series)
+        public  Series ReadSeriesFromTxtClass (Series_txt series)
         {
             Series temp = new Series();
             temp.title=series.title;
@@ -160,7 +162,7 @@ namespace ObjectOrientedDesigndProject
             temp.episodes = new List<Episode>();
             return temp;
         }
-        private Episode ReadEpisodeFormTxtClass (Episode_txt episode)
+        public Episode ReadEpisodeFormTxtClass (Episode_txt episode)
         {
             Episode temp = new Episode();
             temp.title = episode.title;
@@ -169,7 +171,7 @@ namespace ObjectOrientedDesigndProject
             temp.author = _mainAuthorDict[episode.authorId];
             return temp;
         }
-        private Movie ReadMovieFromTxtClass (Movie_txt movie)
+        public Movie ReadMovieFromTxtClass (Movie_txt movie)
         {
             Movie temp = new Movie();
             temp.genere=movie.genere;
@@ -356,7 +358,7 @@ namespace ObjectOrientedDesigndProject
 
         public object GetTableOfName(string name)
         {
-            return data_main.CommandArrayDict[name];
+             return data_main.CommandArrayDict[name];
         }
         public object GetTableSecondaryOfName(string name)
         {

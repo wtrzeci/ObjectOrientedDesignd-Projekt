@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ObjectOrientedDesigndProject.classes 
 {
-    internal class Movie : InterfaceBasse, ListInnitializable
+    public class Movie : InterfaceBasse, ListInnitializable
     {
         public string name { get; set; }
         public string genere { get; set; }

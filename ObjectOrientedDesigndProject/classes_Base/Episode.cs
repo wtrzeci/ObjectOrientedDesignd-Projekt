@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ObjectOrientedDesigndProject.classes
 {
-    internal class Episode : InterfaceBasse, ListInnitializable
+    public class Episode : InterfaceBasse, ListInnitializable
     {
         public string title { get; set; }
         public int duration { get; set; }
