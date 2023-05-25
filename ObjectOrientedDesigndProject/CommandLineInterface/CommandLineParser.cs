@@ -18,8 +18,10 @@ namespace ObjectOrientedDesigndProject
             Console.WriteLine("Please input commands:");
             while(true)
             {
-                var line = Console.ReadLine();
-                string[] parsed = line.Split(' ');
+                //refactor this, split it into two methods + implement queue as a global variable :)
+
+                var line = Console.ReadLine();//<------this goes to a separate function, which will be responsible for addding lines to the queue :)
+                string[] parsed = line.Split(' '); // <----- this part can go to the another separate function, since it is dependent only on one string :)
                 string command = parsed[0];
                 string[] args = parsed.Skip(1).ToArray();
                 switch (command)
@@ -60,7 +62,6 @@ namespace ObjectOrientedDesigndProject
         {
             dynamic obj = bitflix.GetTableOfName(args[0]);
             Func<object, object, bool> func = bitflix.GetFuncOfName(args[2]);
-
             foreach (dynamic temp in obj)
             {
                 if (temp.Properties()[args[1]] is int)
@@ -86,7 +87,6 @@ namespace ObjectOrientedDesigndProject
             {
                 _tableName += "s";
             }
-            
             dynamic obj,second;
             if (args[1] == "secondary")
             {
