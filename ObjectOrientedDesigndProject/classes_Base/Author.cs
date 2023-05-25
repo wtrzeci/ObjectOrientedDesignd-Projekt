@@ -20,7 +20,7 @@ namespace ObjectOrientedDesigndProject.classes
         {
             Dictionary<string, object> properties = new Dictionary<string, object>
             {
-                {"name",Name },
+                {"name", Name },
                {"surname",Surname},
                {"birthYear",birthYear },
                {"awards",awards }
